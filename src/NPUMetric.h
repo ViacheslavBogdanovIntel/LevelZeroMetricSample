@@ -10,6 +10,8 @@ public:
     const std::string& GetDescription() const { return m_description; }
     const std::string& GetUnits() const { return m_units; }
 
+    static std::string FormatValue(zet_typed_value_t value);
+
 private:
     zet_metric_handle_t     m_metric_handle;
     zet_metric_properties_t m_metric_props;

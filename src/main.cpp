@@ -135,7 +135,8 @@ int main(int argc, char* argv[])
 					size_t metric_id = 0;
 					for (auto m : calculated_metrics)
 					{
-						printf("\t%s = %llu,\n", current_metric_list[metric_id % current_metric_list.size()]->GetName().c_str(), m.value.ui64);
+						NPUMetric* cur_metric = current_metric_list[metric_id % current_metric_list.size()];
+						printf("\t%s = %s,\n", cur_metric->GetName().c_str(), NPUMetric::FormatValue(m).c_str());
 						metric_id++;
 					}
 				}
@@ -144,7 +145,7 @@ int main(int argc, char* argv[])
 					printf("Warning: calculated metric list doesn't match metric group, printing without parsing:\n");
 					for (auto m : calculated_metrics)
 					{
-						printf("\t%llu, ", m.value.ui64);
+						printf("\t%s, ", NPUMetric::FormatValue(m).c_str());
 					}
 					printf("\n");
 				}
