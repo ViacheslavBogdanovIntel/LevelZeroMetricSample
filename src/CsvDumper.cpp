@@ -42,7 +42,7 @@ void CsvDumper::WriteMetricValues(std::vector<zet_typed_value_t> calculated_metr
         {
             if (metric_id != 0 && (metric_id % current_metric_list.size() == 0))
                 m_ofs << std::endl;
-            m_ofs << NPUMetric::FormatValue(m) << std::endl;
+            m_ofs << NPUMetric::FormatValue(m) << ",";
             metric_id++;
         }
         m_ofs << std::endl;
