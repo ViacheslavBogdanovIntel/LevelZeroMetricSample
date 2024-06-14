@@ -46,6 +46,8 @@ bool NPUMetricStreamer::ReadData(std::vector<uint8_t>& raw_data)
     status = zetMetricStreamerReadData(m_metric_streamer, UINT32_MAX, &raw_size, nullptr);
     if (status != ZE_RESULT_SUCCESS)
         return false;
+    if (raw_size == 0)
+        return false;
     raw_data.resize(raw_size);
     status = zetMetricStreamerReadData(m_metric_streamer, UINT32_MAX, &raw_size, raw_data.data());
     return (status == ZE_RESULT_SUCCESS);
