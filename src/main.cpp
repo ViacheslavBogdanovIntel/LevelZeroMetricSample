@@ -2,6 +2,7 @@
 #include "NPUCollector.h"
 #include "NPUMetricStreamer.h"
 #include "argparser.h"
+#include "CsvDumper.h"
 
 
 int main(int argc, char* argv[]) 
@@ -13,6 +14,7 @@ int main(int argc, char* argv[])
 	bool enumerate_metrics = settings.ListAvailableMetrics.Value;
 	bool use_npu = std::string(settings.DeviceType.Value) == "npu";
 	uint32_t sample_count = settings.SampleCount.Value;
+	std::string csv_name = std::string(settings.CsvFileName.Value);
 
 	ze_init_flag_t collector_init_flag;
 	ze_device_type_t device_type;
@@ -118,6 +120,12 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
+	CsvDumper csv(csv_name);
+	if (!csv_name.empty())
+	{
+		csv.WriteHeader(selected_group);
+	}
+
 	auto current_metric_list = selected_group->GetMetricDescs();
 
 	int interval = 1000; //ms
@@ -130,24 +138,31 @@ int main(int argc, char* argv[])
 			std::vector<zet_typed_value_t> calculated_metrics;
 			if (selected_group->CalculateMetrics(raw_data, calculated_metrics))
 			{
-				if (calculated_metrics.size() % current_metric_list.size() == 0)
+				if (!csv_name.empty())
 				{
-					size_t metric_id = 0;
-					for (auto m : calculated_metrics)
-					{
-						NPUMetric* cur_metric = current_metric_list[metric_id % current_metric_list.size()];
-						printf("\t%s = %s,\n", cur_metric->GetName().c_str(), NPUMetric::FormatValue(m).c_str());
-						metric_id++;
-					}
+					csv.WriteMetricValues(calculated_metrics);
 				}
 				else
 				{
-					printf("Warning: calculated metric list doesn't match metric group, printing without parsing:\n");
-					for (auto m : calculated_metrics)
+					if (calculated_metrics.size() % current_metric_list.size() == 0)
 					{
-						printf("\t%s, ", NPUMetric::FormatValue(m).c_str());
+						size_t metric_id = 0;
+						for (auto m : calculated_metrics)
+						{
+							NPUMetric* cur_metric = current_metric_list[metric_id % current_metric_list.size()];
+							printf("\t%s = %s,\n", cur_metric->GetName().c_str(), NPUMetric::FormatValue(m).c_str());
+							metric_id++;
+						}
 					}
-					printf("\n");
+					else
+					{
+						printf("Warning: calculated metric list doesn't match metric group, printing without parsing:\n");
+						for (auto m : calculated_metrics)
+						{
+							printf("\t%s, ", NPUMetric::FormatValue(m).c_str());
+						}
+						printf("\n");
+					}
 				}
 			}
 			else

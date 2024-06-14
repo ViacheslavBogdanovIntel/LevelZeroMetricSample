@@ -19,6 +19,8 @@ add_executable(LevelZeroMetricSample
     src/NPUMetricGroup.h
     src/NPUMetricStreamer.cpp
     src/NPUMetricStreamer.h
+    src/CsvDumper.cpp
+    src/CsvDumper.h
     src/common.h
     src/argparser.h
 )

@@ -1,3 +1,4 @@
+#pragma once
 #include <cstdint>
 #include <stdlib.h>
 #include <string.h>
@@ -20,12 +21,14 @@ struct Settings
     Settings()
         : DeviceType("-device", "npu")
         , MetricSetName("-set", "ShaveIL1Cache")
+        , CsvFileName("-csv", "")
         , ListAvailableMetrics("-listMetrics", false)
         , SampleCount("-samples", 5)
     { }
 
     InputParam<const char*> DeviceType;
     InputParam<const char*> MetricSetName;
+    InputParam<const char*> CsvFileName;
     InputParam<bool>        ListAvailableMetrics;
     InputParam<uint32_t>    SampleCount;
 };
@@ -53,6 +56,10 @@ bool ParseInputArguments(int argc, char* argv[], Settings* settings)
             {
                 settings->MetricSetName.Value = parseStringParameter(argv[++i]);
             }
+            else if (strcmp(argv[i], settings->CsvFileName.OptionText) == 0)
+            {
+                settings->CsvFileName.Value = parseStringParameter(argv[++i]);
+            }
             else if (strcmp(argv[i], settings->ListAvailableMetrics.OptionText) == 0)
             {
                 settings->ListAvailableMetrics.Value = parseBoolParameter(argv[++i]);
@@ -67,6 +74,7 @@ bool ParseInputArguments(int argc, char* argv[], Settings* settings)
                 sprintf_s(helpMessageBuffer, "Command line args (optional):\n" \
                     "\t-device <type> : device to use: npu or gpu (default npu)\n" \
                     "\t-set <metricSet> : metric set to use (default ShaveIL1Cache)\n" \
+                    "\t-csv <CsvFileName> : dump to csv file (default no)\n" \
                     "\t-listMetrics <enable>: list available metrics only (default 0 = disabled)\n" \
                     "\t-samples <n> : number of reports to read (default 5)\n" \
                     "\t-help : display help message\n" \
