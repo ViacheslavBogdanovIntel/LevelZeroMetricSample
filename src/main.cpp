@@ -118,6 +118,8 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
+	auto current_metric_list = selected_group->GetMetricDescs();
+
 	int interval = 1000; //ms
 	for (uint32_t i = 0; i < sample_count; ++i)
 	{
@@ -128,9 +130,22 @@ int main(int argc, char* argv[])
 			std::vector<zet_typed_value_t> calculated_metrics;
 			if (selected_group->CalculateMetrics(raw_data, calculated_metrics))
 			{
-				for (auto m : calculated_metrics)
+				if (current_metric_list.size() == calculated_metrics.size())
 				{
-					printf("\t%llu,\n", m.value.ui64);
+					size_t metric_id = 0;
+					for (auto m : calculated_metrics)
+					{
+						printf("\t%s = %llu,\n", current_metric_list[metric_id]->GetName().c_str(), m.value.ui64);
+					}
+				}
+				else
+				{
+					printf("Warning: calculated metric list doesn't match metric group, printing without parsing:\n");
+					for (auto m : calculated_metrics)
+					{
+						printf("\t%llu, ", m.value.ui64);
+					}
+					printf("\n");
 				}
 			}
 			else
