@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
 	const auto& time_based_groups = selected_device->GetTimeBasedMetricGroups();
 	for (auto group : time_based_groups)
 	{
-		if (group && group->GetHandle())
+		if (group && group->GetHandle() && group->GetName() == std::string(settings.MetricSetName.Value))
 		{
 			selected_group = group;
 			printf("Selecting metric group: %s\n", selected_group->GetName().c_str());
