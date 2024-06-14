@@ -1,23 +1,31 @@
 #include <windows.h> //for Sleep()
 #include "NPUCollector.h"
 #include "NPUMetricStreamer.h"
+#include "argparser.h"
 
 
 int main(int argc, char* argv[]) 
 {
-	bool enumerate_metrics = true;
-	bool use_npu = false;
+	Settings settings;
+	if (!ParseInputArguments(argc, argv, &settings))
+		return 0;
+
+	bool enumerate_metrics = settings.ListAvailableMetrics.Value;
+	bool use_npu = std::string(settings.DeviceType.Value) == "npu";
+	uint32_t sample_count = settings.SampleCount.Value;
 
 	ze_init_flag_t collector_init_flag;
 	ze_device_type_t device_type;
 
 	if (use_npu)
 	{
+		printf("Requesting NPU devices.\n");
 		collector_init_flag = ZE_INIT_FLAG_VPU_ONLY;
 		device_type = ZE_DEVICE_TYPE_VPU;
 	}
 	else
 	{
+		printf("Requesting GPU devices.\n");
 		collector_init_flag = ZE_INIT_FLAG_GPU_ONLY;
 		device_type = ZE_DEVICE_TYPE_GPU;
 	}
@@ -74,6 +82,11 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
+	if (enumerate_metrics)
+	{
+		return 0;
+	}
+
 	NPUMetricGroup* selected_group = nullptr;
 	const auto& time_based_groups = selected_device->GetTimeBasedMetricGroups();
 	for (auto group : time_based_groups)
@@ -106,7 +119,7 @@ int main(int argc, char* argv[])
 	}
 
 	int interval = 1000; //ms
-	for (int i = 0; i < 5; ++i)
+	for (uint32_t i = 0; i < sample_count; ++i)
 	{
 		printf("Tick(ms):%10llu\n", GetTickCount64());
 		std::vector<uint8_t> raw_data;

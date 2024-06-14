@@ -28,4 +28,17 @@ Not yet supported
 
 # How to use
 
-TBD
+Run LevelZeroMetricSample.exe with the following parameters:
+
+```
+-device <type> : device to use: npu or gpu (default npu)
+-set <metricSet> : metric set to use (default ShaveIL1Cache)
+-listMetrics : list available metrics only (default true)
+-samples <n> : number of reports to read (default 5)
+-help : display help message
+```
+
+Example command : 
+```
+LevelZeroMetricSample.exe -device npu -set NOC -listMetrics false -samples 20
+```
