@@ -33,6 +33,7 @@ Run LevelZeroMetricSample.exe with the following parameters:
 ```
 -device <type> : device to use: npu or gpu (default npu)
 -set <metricSet> : metric set to use (default ShaveIL1Cache)
+-csv <CsvFileName> : dump to csv file (default no)
 -listMetrics <enable>: list available metrics only (default 0 = disabled)
 -samples <n> : number of reports to read (default 5)
 -help : display help message
@@ -40,5 +41,5 @@ Run LevelZeroMetricSample.exe with the following parameters:
 
 Example command : 
 ```
-LevelZeroMetricSample.exe -device npu -set NOC -listMetrics false -samples 20
+LevelZeroMetricSample.exe -device npu -set NOC -csv dump.csv -listMetrics false -samples 20
 ```

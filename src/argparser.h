@@ -78,7 +78,7 @@ bool ParseInputArguments(int argc, char* argv[], Settings* settings)
                     "\t-listMetrics <enable>: list available metrics only (default 0 = disabled)\n" \
                     "\t-samples <n> : number of reports to read (default 5)\n" \
                     "\t-help : display help message\n" \
-                    "Example command : LevelZeroMetricSample.exe -device npu -set NOC -listMetrics false -samples 20\n" \
+                    "Example command : LevelZeroMetricSample.exe -device npu -set NOC -csv dump.csv -listMetrics false -samples 20\n" \
                 );
                 printf("%s", helpMessageBuffer);
                 return false;
