@@ -130,12 +130,13 @@ int main(int argc, char* argv[])
 			std::vector<zet_typed_value_t> calculated_metrics;
 			if (selected_group->CalculateMetrics(raw_data, calculated_metrics))
 			{
-				if (current_metric_list.size() == calculated_metrics.size())
+				if (calculated_metrics.size() % current_metric_list.size() == 0)
 				{
 					size_t metric_id = 0;
 					for (auto m : calculated_metrics)
 					{
-						printf("\t%s = %llu,\n", current_metric_list[metric_id]->GetName().c_str(), m.value.ui64);
+						printf("\t%s = %llu,\n", current_metric_list[metric_id % current_metric_list.size()]->GetName().c_str(), m.value.ui64);
+						metric_id++;
 					}
 				}
 				else
