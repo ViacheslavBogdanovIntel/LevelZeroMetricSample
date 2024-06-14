@@ -67,7 +67,7 @@ bool ParseInputArguments(int argc, char* argv[], Settings* settings)
                 sprintf_s(helpMessageBuffer, "Command line args (optional):\n" \
                     "\t-device <type> : device to use: npu or gpu (default npu)\n" \
                     "\t-set <metricSet> : metric set to use (default ShaveIL1Cache)\n" \
-                    "\t-listMetrics : list available metrics only (default true)\n" \
+                    "\t-listMetrics <enable>: list available metrics only (default 0 = disabled)\n" \
                     "\t-samples <n> : number of reports to read (default 5)\n" \
                     "\t-help : display help message\n" \
                     "Example command : LevelZeroMetricSample.exe -device npu -set NOC -listMetrics false -samples 20\n" \

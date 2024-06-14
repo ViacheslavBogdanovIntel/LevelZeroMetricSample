@@ -33,7 +33,7 @@ Run LevelZeroMetricSample.exe with the following parameters:
 ```
 -device <type> : device to use: npu or gpu (default npu)
 -set <metricSet> : metric set to use (default ShaveIL1Cache)
--listMetrics : list available metrics only (default true)
+-listMetrics <enable>: list available metrics only (default 0 = disabled)
 -samples <n> : number of reports to read (default 5)
 -help : display help message
 ```
