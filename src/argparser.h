@@ -20,7 +20,7 @@ struct Settings
     Settings()
         : DeviceType("-device", "npu")
         , MetricSetName("-set", "ShaveIL1Cache")
-        , ListAvailableMetrics("-listMetrics", true)
+        , ListAvailableMetrics("-listMetrics", false)
         , SampleCount("-samples", 5)
     { }
 
